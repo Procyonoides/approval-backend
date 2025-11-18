@@ -155,3 +155,61 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// 🆕 Admin: Create new user
+exports.createUser = async (req, res) => {
+  try {
+    const { username, nama, bagian, email, password, role } = req.body;
+
+    // Validasi
+    if (!username || !nama || !bagian || !email || !password) {
+      return res.status(400).json({ 
+        message: 'Semua field harus diisi' 
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ 
+        message: 'Password minimal 6 karakter' 
+      });
+    }
+
+    // Cek apakah username atau email sudah ada
+    const existingUser = await User.findOne({ 
+      $or: [{ username }, { email }] 
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ 
+        message: 'Username atau email sudah digunakan' 
+      });
+    }
+
+    // Buat user baru
+    const newUser = new User({
+      username,
+      nama,
+      bagian,
+      email,
+      password, // akan di-hash otomatis oleh pre-save hook
+      role: role || 'user'
+    });
+
+    await newUser.save();
+
+    const createdUser = await User.findById(newUser._id).select('-password');
+    
+    res.status(201).json({ 
+      message: 'User berhasil dibuat', 
+      user: createdUser 
+    });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    if (error.code === 11000) {
+      return res.status(400).json({ 
+        message: 'Username atau email sudah digunakan' 
+      });
+    }
+    res.status(500).json({ message: error.message });
+  }
+};

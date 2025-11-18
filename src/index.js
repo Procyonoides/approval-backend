@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
     const { userId, role } = data;
     socket.join(role); // Join room berdasarkan role (admin/user)
     socket.join(userId); // Join room berdasarkan userId
-    console.log(`👤 User ${userId} (${role}) joined`);
+    console.log(`👤 User ${userId} (${role}) joined rooms: ${role}, ${userId}`);
   });
 
   socket.on('disconnect', () => {
@@ -69,7 +69,7 @@ mongoose.connect(process.env.MONGO_URI, {
 })
   .then(() => {
     console.log('✅ MongoDB connected');
-    app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+    server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
   })
   .catch(err => {
     console.error('❌ MongoDB connection error:', err);

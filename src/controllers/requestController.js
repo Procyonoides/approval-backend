@@ -21,6 +21,7 @@ exports.createRequest = async (req, res) => {
 
     // 🔔 Emit real-time notification ke ADMIN
     const io = req.app.get('io');
+    console.log('📤 Emitting newRequest to admin room');
     io.to('admin').emit('newRequest', {
       message: `Pengajuan baru dari ${saved.userId.nama}`,
       request: saved
@@ -79,6 +80,7 @@ exports.approveRequest = async (req, res) => {
 
     // 🔔 Emit real-time notification ke USER yang bersangkutan
     const io = req.app.get('io');
+    console.log('📤 Emitting requestApproved to user:', request.userId._id.toString()); // 👈 Debug log
     io.to(request.userId._id.toString()).emit('requestApproved', {
       message: `Pengajuan "${request.title}" telah disetujui!`,
       request: request

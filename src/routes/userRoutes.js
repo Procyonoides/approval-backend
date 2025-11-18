@@ -6,7 +6,8 @@ const {
   getAllUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  createUser
 } = require('../controllers/userController');
 const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
 
@@ -16,6 +17,7 @@ router.put('/profile', verifyToken, updateProfile);
 
 // 🔹 Admin routes (untuk kelola semua user)
 router.get('/', verifyToken, isAdmin, getAllUsers);
+router.get('/', verifyToken, isAdmin, createUser);
 router.get('/:id', verifyToken, isAdmin, getUserById);
 router.put('/:id', verifyToken, isAdmin, updateUser);
 router.delete('/:id', verifyToken, isAdmin, deleteUser);
