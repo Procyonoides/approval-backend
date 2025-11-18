@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+
+# Logs
+npm-debug.log
+yarn-error.log
+logs/
+*.log
+
+# Backups
+.bak/
+
+# Coverage
+coverage/
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Temp files
+.tmp/
